@@ -22,13 +22,13 @@ async function bootstrap() {
 
   // Configure Swagger
   const config = new DocumentBuilder()
-    .setTitle('User Service API')
+    .setTitle('Projects Service API')
     .setDescription(`
-      The User Service API provides endpoints for user management and authentication.
+      The Projects Service API provides endpoints for project and bot management.
       
       ## Features
-      - User registration and authentication
-      - User profile management
+      - Project management
+      - Bot management
       - JWT-based authentication
       
       ## Authentication
@@ -36,8 +36,8 @@ async function bootstrap() {
       Format: \`Bearer <token>\`
     `)
     .setVersion('1.0')
-    .addTag('auth', 'Authentication endpoints')
-    .addTag('users', 'User management endpoints')
+    .addTag('projects', 'Project management endpoints')
+    .addTag('bots', 'Bot management endpoints')
     .addBearerAuth(
       {
         type: 'http',
@@ -47,9 +47,9 @@ async function bootstrap() {
         description: 'Enter JWT token',
         in: 'header',
       },
-      'JWT-auth', // This name here is important for matching up with @ApiBearerAuth() in your controllers
+      'JWT-auth',
     )
-    .addServer('http://localhost:3000', 'Local Development')
+    .addServer('http://localhost:3001', 'Local Development')
     .build();
   
   const document = SwaggerModule.createDocument(app, config, {
@@ -62,7 +62,7 @@ async function bootstrap() {
       tagsSorter: 'alpha',
       operationsSorter: 'alpha',
     },
-    customSiteTitle: 'User Service API Documentation',
+    customSiteTitle: 'Projects Service API Documentation',
   });
 
   // Create microservice
@@ -70,11 +70,11 @@ async function bootstrap() {
     transport: Transport.TCP,
     options: {
       host: 'localhost',
-      port: 3000,
+      port: 3001,
     },
   });
   
   await microservice.listen();
-  await app.listen(5000);
+  await app.listen(5001);
 }
 bootstrap(); 

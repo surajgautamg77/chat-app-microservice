@@ -4,6 +4,7 @@ const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
+const microservices_1 = require("@nestjs/microservices");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.enableCors();
@@ -51,7 +52,15 @@ async function bootstrap() {
         },
         customSiteTitle: 'User Service API Documentation',
     });
-    await app.listen(3000);
+    const microservice = await core_1.NestFactory.createMicroservice(app_module_1.AppModule, {
+        transport: microservices_1.Transport.TCP,
+        options: {
+            host: 'localhost',
+            port: 3000,
+        },
+    });
+    await microservice.listen();
+    await app.listen(5000);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

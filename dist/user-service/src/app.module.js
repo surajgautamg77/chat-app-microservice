@@ -21,19 +21,30 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
+                envFilePath: '.env',
             }),
             typeorm_1.TypeOrmModule.forRootAsync({
                 imports: [config_1.ConfigModule],
-                useFactory: (configService) => ({
-                    type: 'postgres',
-                    host: configService.get('DB_HOST'),
-                    port: configService.get('DB_PORT'),
-                    username: configService.get('DB_USERNAME'),
-                    password: configService.get('DB_PASSWORD'),
-                    database: configService.get('DB_DATABASE'),
-                    entities: [user_entity_1.User],
-                    synchronize: process.env.NODE_ENV !== 'production',
-                }),
+                useFactory: (configService) => {
+                    console.log('Database Config:', {
+                        type: configService.get('DB_TYPE'),
+                        host: configService.get('DB_HOST'),
+                        port: configService.get('DB_PORT'),
+                        username: configService.get('DB_USER'),
+                        database: configService.get('DB_DATABASE'),
+                    });
+                    return {
+                        type: 'postgres',
+                        host: "localhost",
+                        port: 5432,
+                        username: "postgres",
+                        password: "postgres",
+                        database: "chat-app-microservices",
+                        entities: [user_entity_1.User],
+                        synchronize: process.env.NODE_ENV !== 'production',
+                        autoLoadEntities: true,
+                    };
+                },
                 inject: [config_1.ConfigService],
             }),
             auth_module_1.AuthModule,

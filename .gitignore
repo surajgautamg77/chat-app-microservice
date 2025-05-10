@@ -1,1 +1,78 @@
-node_modules
+# compiled output
+/dist
+/node_modules
+/build
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+
+# Tests
+/coverage
+/.nyc_output
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Temporary files
+*.swp
+*.swo
+*~
+
+# Package manager locks
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Microservices specific
+apps/*/dist
+apps/*/node_modules
+apps/*/.env
+apps/*/.env.*
+!apps/*/.env.example
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+
+# Docker
+.docker
+docker-compose.override.yml
+
+# Misc
+.cache
+.temp
+.tmp
