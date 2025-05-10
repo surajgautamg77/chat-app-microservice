@@ -1,0 +1,159 @@
+syntax = "proto3";
+
+package project;
+
+service ProjectService {
+  rpc CreateProject (CreateProjectRequest) returns (ProjectResponse);
+  rpc GetProject (GetProjectRequest) returns (ProjectResponse);
+  rpc UpdateProject (UpdateProjectRequest) returns (ProjectResponse);
+  rpc DeleteProject (DeleteProjectRequest) returns (DeleteProjectResponse);
+  rpc ListProjects (ListProjectsRequest) returns (ListProjectsResponse);
+  
+  rpc CreateBot (CreateBotRequest) returns (BotResponse);
+  rpc GetBot (GetBotRequest) returns (BotResponse);
+  rpc UpdateBot (UpdateBotRequest) returns (BotResponse);
+  rpc DeleteBot (DeleteBotRequest) returns (DeleteBotResponse);
+  rpc ListBots (ListBotsRequest) returns (ListBotsResponse);
+  
+  rpc UploadDocument (UploadDocumentRequest) returns (DocumentResponse);
+  rpc AddWebsite (AddWebsiteRequest) returns (WebsiteResponse);
+  rpc ProcessMessage (ProcessMessageRequest) returns (MessageResponse);
+}
+
+message CreateProjectRequest {
+  string userId = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message GetProjectRequest {
+  string id = 1;
+}
+
+message UpdateProjectRequest {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message DeleteProjectRequest {
+  string id = 1;
+}
+
+message DeleteProjectResponse {
+  bool success = 1;
+}
+
+message ListProjectsRequest {
+  string userId = 1;
+  int32 page = 2;
+  int32 limit = 3;
+}
+
+message ListProjectsResponse {
+  repeated ProjectResponse projects = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 limit = 4;
+}
+
+message ProjectResponse {
+  string id = 1;
+  string userId = 2;
+  string name = 3;
+  string description = 4;
+  string createdAt = 5;
+  string updatedAt = 6;
+}
+
+message CreateBotRequest {
+  string projectId = 1;
+  string name = 2;
+  string description = 3;
+  string model = 4;
+}
+
+message GetBotRequest {
+  string id = 1;
+}
+
+message UpdateBotRequest {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string model = 4;
+}
+
+message DeleteBotRequest {
+  string id = 1;
+}
+
+message DeleteBotResponse {
+  bool success = 1;
+}
+
+message ListBotsRequest {
+  string projectId = 1;
+  int32 page = 2;
+  int32 limit = 3;
+}
+
+message ListBotsResponse {
+  repeated BotResponse bots = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 limit = 4;
+}
+
+message BotResponse {
+  string id = 1;
+  string projectId = 2;
+  string name = 3;
+  string description = 4;
+  string model = 5;
+  string createdAt = 6;
+  string updatedAt = 7;
+}
+
+message UploadDocumentRequest {
+  string botId = 1;
+  bytes content = 2;
+  string filename = 3;
+  string contentType = 4;
+}
+
+message DocumentResponse {
+  string id = 1;
+  string botId = 2;
+  string filename = 3;
+  string contentType = 4;
+  string status = 5;
+  string createdAt = 6;
+}
+
+message AddWebsiteRequest {
+  string botId = 1;
+  string url = 2;
+}
+
+message WebsiteResponse {
+  string id = 1;
+  string botId = 2;
+  string url = 3;
+  string status = 4;
+  string createdAt = 5;
+}
+
+message ProcessMessageRequest {
+  string botId = 1;
+  string message = 2;
+  string userId = 3;
+}
+
+message MessageResponse {
+  string id = 1;
+  string botId = 2;
+  string message = 3;
+  string response = 4;
+  string createdAt = 5;
+} 

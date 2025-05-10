@@ -1,0 +1,127 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    build:
+      context: .
+      dockerfile: ./apps/api-gateway/Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - user-service
+      - payment-service
+      - project-service
+    environment:
+      - NODE_ENV=development
+      - USER_SERVICE_URL=user-service:3001
+      - PAYMENT_SERVICE_URL=payment-service:3002
+      - PROJECT_SERVICE_URL=project-service:3003
+
+  user-service:
+    build:
+      context: .
+      dockerfile: ./apps/user-service/Dockerfile
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_DATABASE=user_service
+
+  payment-service:
+    build:
+      context: .
+      dockerfile: ./apps/payment-service/Dockerfile
+    ports:
+      - "3002:3002"
+    depends_on:
+      - postgres
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_DATABASE=payment_service
+
+  project-service:
+    build:
+      context: .
+      dockerfile: ./apps/project-service/Dockerfile
+    ports:
+      - "3003:3003"
+    depends_on:
+      - postgres
+      - scraper-service
+      - embedder-service
+      - nlp-service
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_DATABASE=project_service
+      - SCRAPER_SERVICE_URL=scraper-service:5000
+      - EMBEDDER_SERVICE_URL=embedder-service:5001
+      - NLP_SERVICE_URL=nlp-service:5002
+
+  scraper-service:
+    build:
+      context: .
+      dockerfile: ./apps/scraper-service/Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  embedder-service:
+    build:
+      context: .
+      dockerfile: ./apps/embedder-service/Dockerfile
+    ports:
+      - "5001:5001"
+    depends_on:
+      - postgres
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_DATABASE=vector_db
+
+  nlp-service:
+    build:
+      context: .
+      dockerfile: ./apps/nlp-service/Dockerfile
+    ports:
+      - "5002:5002"
+    depends_on:
+      - postgres
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_DATABASE=vector_db
+
+  postgres:
+    image: ankane/pgvector:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_MULTIPLE_DATABASES=user_service,payment_service,project_service,vector_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data: 
