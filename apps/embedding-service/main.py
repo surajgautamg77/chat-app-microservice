@@ -135,6 +135,25 @@ async def search_similar(query: str, bot_id: str, limit: int = 5):
     except Exception as e:
         logger.error(f"Error searching similar texts: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+@app.get("/")
+async def root():
+    return {"message": "Scraper Service is running"}
+async def scrape_document(file: UploadFile = File(...)):
+    try:
+        content = await file.read()
+        
+        # TODO: Implement document parsing based on file type
+        # For now, just return the raw content
+        return {
+            "filename": file.filename,
+            "content_type": file.content_type,
+            "content": content.decode('utf-8', errors='ignore')
+        }
+    except Exception as e:
+        logger.error(f"Error processing document {file.filename}: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 
 if __name__ == "__main__":
     import uvicorn
