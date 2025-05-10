@@ -1,0 +1,8 @@
+FastAPI Service: embedding-service
+Handles two main tasks:
+
+Train Bot (/train-bot):
+Accepts a PDF or website URL from projects service through train bot api, then scrapes content, chunks text, generates embeddings, and stores them in the database. Returns a “bot under training” message.
+
+Chat (/chat):
+Accepts a user query from projects service from chat api, then generates its embedding, performs similarity search, and returns the top 5 matching text chunks.
