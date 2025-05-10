@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -63,7 +64,17 @@ async function bootstrap() {
     },
     customSiteTitle: 'User Service API Documentation',
   });
+
+  // Create microservice
+  const microservice = await NestFactory.createMicroservice(AppModule, {
+    transport: Transport.TCP,
+    options: {
+      host: 'localhost',
+      port: 3000,
+    },
+  });
   
+  await microservice.listen();
   await app.listen(3000);
 }
 bootstrap(); 
